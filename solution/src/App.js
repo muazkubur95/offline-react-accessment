@@ -1,22 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
+import MyForm from './components/MyForm';
+// import LocationDropdown from './components/LocationDropdown';
+// import NameInput from './components/NameInput';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {/* <NameInput></NameInput>
+        <LocationDropdown></LocationDropdown> */}
+        <MyForm></MyForm>
+        
       </header>
     </div>
   );

@@ -3,12 +3,16 @@ import { isNameValid, getLocations } from '../mock-api/apis';
 
 function MyForm() {
   const [name, setName] = useState('');
-  const [location, setLocation] = useState('Canada'); // defaulting to the first option as per your image
+  const [location, setLocation] = useState('Canada'); // defaulting to the first option to Canada
   const [locations, setLocations] = useState([]);
+  // Entries are stored in the local state to allow for efficient access and manipulation.
+// This reduces unnecessary API calls and potential latency.
   const [entries, setEntries] = useState([]);
   const [error, setError] = useState(null);
 
   // Fetch location options from mock API
+  // Asynchronous API calls ensure the UI doesn't freeze or become unresponsive
+  // during data fetching or validation. This leads to a smoother user experience
   useEffect(() => {
     const fetchLocations = async () => {
       const locationOptions = await getLocations();
@@ -19,6 +23,8 @@ function MyForm() {
   }, []);
 
   // Validate name in real-time as the user types
+  // This effect is used for real-time validation. It enhances user experience by
+// providing immediate feedback on the availability of the name.
   useEffect(() => {
     let isMounted = true; // Track if the component is mounted
     const validate = async () => {
@@ -42,6 +48,9 @@ function MyForm() {
     if (name) {
       validate();
     } else {
+      // Error handling is crucial for a good user experience. Users are informed of
+      // any issues immediately, which builds trust and allows them to take corrective
+      // action if necessary.
       setError(null); // Clear the error when name is empty
     }
 
@@ -49,35 +58,37 @@ function MyForm() {
       isMounted = false; 
     };
   }, [name]);
-  
+
+  // Client-side deduplication prevents unnecessary state updates and re-renders,
+  // improving the efficiency of the app.
   const handleAdd = async () => {
     console.log(error)
     if (name && !error) {
       // Check if the name is already in the entries array
       const nameExists = entries.some((entry) => entry.name === name);
-      // if (!nameExists) {
+
         setEntries([...entries, { name, location }]);
         setName(''); // Clear the name field
-        // setLocation(''); // Clear the location field
-      // } else {
-        // setError('This name is already in use');
-      // }
+
     }
-    // if (!error && name) {
-    //   setEntries(entries.concat({ name, location }));
-    //   setName(''); // Clear the name field
-    // }
+
   };
 
   // Clear the form
+  // Clear functionality enhances user experience by providing an easy way to
+  // reset the form. This is particularly useful if the user wants to quickly
+// start over without manually clearing each field.
   const handleClear = () => {
     setName('');
     setLocation('Canada'); // Reset location to default
     setError(null);
   };
+  // Preventing default form submission avoids a full page reload, which can
+  // disrupt the user's workflow and waste bandwidth.
 
   return (
   <div className="form-container">
+    
     <form onSubmit={(e) => e.preventDefault()}>
       <div className="form-group">
         <label htmlFor="name">Name:</label>
